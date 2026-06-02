@@ -1,17 +1,12 @@
-FROM node:20-alpine
-
-RUN apk add --no-cache openssl
+FROM node:20.19-alpine
 
 WORKDIR /app
 
 COPY package*.json ./
-
 RUN npm install
 
 COPY . .
 
-RUN npx prisma generate
-
 EXPOSE 5000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && npm run dev"]
+CMD ["sh", "-c", "npx prisma generate && sleep 5 && npx prisma migrate deploy && npm run dev"]
