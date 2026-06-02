@@ -34,7 +34,9 @@ services:
     VITE_API_URL: http://localhost:5000/api
   depends_on:
     - backend
-  restart: always
+  volumes:
+    - ./frontend:/app
+    - /app/node_modules
 
 volumes:
   pgdata:
