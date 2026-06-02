@@ -2,7 +2,9 @@ FROM node:20-slim
 
 WORKDIR /app
 
-RUN apt-get install -y netcat-openbsd
+RUN apt-get update \
+  && apt-get install -y netcat-openbsd \
+  && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
 RUN npm install
