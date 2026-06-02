@@ -20,13 +20,21 @@ export const postEntry = async (req: Request, res: Response) => {
 };
 
 export const deleteEntry = async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+  const idParam = Array.isArray(req.params.id)
+  ? req.params.id[0]
+  : req.params.id;
+
+  const id = parseInt(idParam);
   await workEntryService.deleteEntry(id);
   res.status(204).send();
 };
 
 export const putEntry = async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+  const idParam = Array.isArray(req.params.id)
+  ? req.params.id[0]
+  : req.params.id;
+
+  const id = parseInt(idParam);
   const validation = validateWorkEntry(req.body, true);
   if (!validation.valid) {
     return res.status(400).json({ errors: validation.errors });

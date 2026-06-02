@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15
+    container_name: worklog-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: worklog
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
+  backend:
+    build: ./backend
+    container_name: worklog-backend
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/worklog
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    restart: always
+
+  frontend:
+    build: ./frontend
+    container_name: worklog-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: http://localhost:5000/api
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    restart: always
+
+volumes:
+  pgdata:
